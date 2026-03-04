@@ -1,4 +1,4 @@
-name: CI/CD - Build, Test & Push Docker
+name: CI/CD - Build, Push Docker & SonarCloud Scan
 
 on:
   push:
