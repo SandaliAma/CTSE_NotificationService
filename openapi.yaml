@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:3003
+  - url: http://localhost:5004
     description: Local development
 
 paths:
@@ -14,7 +14,7 @@ paths:
       summary: Send a notification
       description: >
         Receives triggers from other services (Order Service, User Service) to send notifications.
-        Calls User Service via the API Gateway to get the recipient's email address.
+        Calls User Service directly to get the recipient's email address.
       requestBody:
         required: true
         content:
