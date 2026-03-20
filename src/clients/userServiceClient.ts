@@ -1,13 +1,14 @@
 import axios from 'axios';
-import { UserInfo } from '../types';
 
-const GATEWAY_URL = process.env.API_GATEWAY_URL || 'http://localhost:3000';
+const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3001';
+
+export interface UserInfo {
+  _id: string;
+  email: string;
+  username: string;
+}
 
 export const getUserById = async (userId: string): Promise<UserInfo> => {
-  const response = await axios.get(`${GATEWAY_URL}/users/${userId}`, {
-    headers: {
-      'x-internal-key': process.env.INTERNAL_API_KEY || '',
-    },
-  });
+  const response = await axios.get(`${USER_SERVICE_URL}/users/${userId}`);
   return response.data;
 };

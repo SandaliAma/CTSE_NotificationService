@@ -2,10 +2,12 @@ import mongoose from 'mongoose';
 import { getUserById } from '../clients/userServiceClient';
 import Notification from '../models/notificationModel';
 import { SendNotificationPayload, BroadcastPayload } from '../types';
+import { sendEmail } from './emailService';
 
 export const sendNotification = async (payload: SendNotificationPayload) => {
-  // Call User Service via Gateway to get recipient's email
   const user = await getUserById(payload.userId);
+
+  await sendEmail(user.email, payload.type, payload.message);
 
   const notification = await Notification.create({
     userId: payload.userId,
@@ -14,7 +16,6 @@ export const sendNotification = async (payload: SendNotificationPayload) => {
     status: 'sent',
   });
 
-  console.log(`[NOTIFICATION SENT] to: ${user.email}`, notification);
   return { success: true, notification };
 };
 
@@ -36,6 +37,13 @@ export const deleteNotification = async (id: string) => {
 export const broadcastNotification = async (payload: BroadcastPayload) => {
   const notifications = await Promise.all(
     payload.userIds.map(async (userId) => {
+      try {
+        const user = await getUserById(userId);
+        await sendEmail(user.email, 'OrderConfirm', payload.message);
+      } catch {
+        console.error(`[BROADCAST] Could not fetch user or send email for userId: ${userId}`);
+      }
+
       return Notification.create({
         userId,
         message: payload.message,

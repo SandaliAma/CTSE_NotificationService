@@ -39,8 +39,9 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/notification-service:latest
           build-args: |
             MONGODB_URI=${{ secrets.MONGODB_URI }}
-            INTERNAL_API_KEY=${{ secrets.INTERNAL_API_KEY }}
-            API_GATEWAY_URL=${{ secrets.API_GATEWAY_URL }}
+            USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }}
+            SMTP_EMAIL=${{ secrets.SMTP_EMAIL }}
+            SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v5.0.0
