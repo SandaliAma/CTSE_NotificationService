@@ -1,8 +1,8 @@
 export const sendEmail = async (
-  toEmail: string,
+  _toEmail: string,
   type: string,
-  message: string
+  _message: string
 ): Promise<boolean> => {
-  console.log(`[EMAIL LOG] to: ${toEmail} | type: ${type} | message: ${message}`);
+  console.log(`[EMAIL LOG] type: ${type} | status: sent`);
   return true;
 };

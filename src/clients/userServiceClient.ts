@@ -9,6 +9,8 @@ export interface UserInfo {
 }
 
 export const getUserById = async (userId: string): Promise<UserInfo> => {
-  const response = await axios.get(`${USER_SERVICE_URL}/users/${userId}`);
+  const sanitizedId = encodeURIComponent(userId);
+  const url = new URL(`/users/${sanitizedId}`, USER_SERVICE_URL);
+  const response = await axios.get(url.toString());
   return response.data;
 };
