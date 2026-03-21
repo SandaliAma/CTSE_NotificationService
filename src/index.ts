@@ -21,7 +21,7 @@ app.use('/notifications', notificationRoutes);
 // POST /notify/send, POST /notify/broadcast
 app.use('/notify', notifyRoutes);
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 5004;
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
 mongoose

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3001';
+const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:5002';
 
 export interface UserInfo {
   _id: string;
