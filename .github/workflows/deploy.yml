@@ -25,6 +25,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Run tests with coverage
+        run: npm test
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -37,11 +40,6 @@ jobs:
           context: .
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/notification-service:latest
-          build-args: |
-            MONGODB_URI=${{ secrets.MONGODB_URI }}
-            USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }}
-            SMTP_EMAIL=${{ secrets.SMTP_EMAIL }}
-            SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v5.0.0
