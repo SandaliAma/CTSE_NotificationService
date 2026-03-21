@@ -1,19 +1,15 @@
 import express from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import swaggerUi from 'swagger-ui-express';
-import YAML from 'yamljs';
-import path from 'path';
 import notificationRoutes from './routes/notificationRoutes';
 import notifyRoutes from './routes/notifyRoutes';
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
-
-const swaggerDoc = YAML.load(path.join(__dirname, '..', 'openapi.yaml'));
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 // GET /notifications, DELETE /notifications/:id
 app.use('/notifications', notificationRoutes);

@@ -5,9 +5,13 @@ import { SendNotificationPayload, BroadcastPayload } from '../types';
 import { sendEmail } from './emailService';
 
 export const sendNotification = async (payload: SendNotificationPayload) => {
-  const user = await getUserById(payload.userId);
-
-  await sendEmail(user.email, payload.type, payload.message);
+  // Try to fetch user email and send email, but don't fail if user service is unavailable
+  try {
+    const user = await getUserById(payload.userId);
+    await sendEmail(user.email, payload.type, payload.message);
+  } catch {
+    console.error(`[NOTIFY] Could not fetch user or send email for userId: ${payload.userId}`);
+  }
 
   const notification = await Notification.create({
     userId: payload.userId,
