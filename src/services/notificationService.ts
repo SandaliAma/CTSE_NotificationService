@@ -4,20 +4,37 @@ import Notification from '../models/notificationModel';
 import { SendNotificationPayload, BroadcastPayload } from '../types';
 import { sendEmail } from './emailService';
 
+const normalizeType = (type: string): 'Welcome' | 'OrderConfirm' | 'Cancellation' => {
+  const typeMap: { [key: string]: 'Welcome' | 'OrderConfirm' | 'Cancellation' } = {
+    'order_confirmation': 'OrderConfirm',
+    'orderconfirmation': 'OrderConfirm',
+    'orderconfirm': 'OrderConfirm',
+    'OrderConfirm': 'OrderConfirm',
+    'order': 'OrderConfirm',
+    'welcome': 'Welcome',
+    'Welcome': 'Welcome',
+    'cancellation': 'Cancellation',
+    'Cancellation': 'Cancellation',
+    'cancel': 'Cancellation',
+  };
+  return typeMap[type] || 'OrderConfirm';
+};
+
 export const sendNotification = async (payload: SendNotificationPayload) => {
-  // Try to fetch user email and send email, but don't fail if user service is unavailable
+  // Normalize type before saving
+  const normalizedType = normalizeType(payload.type);
+
   try {
     const user = await getUserById(payload.userId);
-    await sendEmail(user.email, payload.type, payload.message);
+    await sendEmail(user.email, normalizedType, payload.message);
   } catch {
     console.error(`[NOTIFY] Could not fetch user or send email for userId: ${payload.userId}`);
   }
 
   const notification = await Notification.create({
     userId: payload.userId,
-    message: payload.message,
-    type: payload.type,
-    status: 'sent',
+    message: payload.message || 'Notification',  
+    type: normalizedType,  
   });
 
   return { success: true, notification };
